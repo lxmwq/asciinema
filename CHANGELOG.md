@@ -1,5 +1,195 @@
 # asciinema changelog
 
+## 3.2.1 (2026-06-16)
+
+* Improved error reporting for server API failures - server-provided error messages are now surfaced, with actionable guidance (e.g. running `asciinema auth`)
+* Built release binaries on Ubuntu 22.04 for broader compatibility with older Linux systems (#742)
+* Upgraded the virtual terminal (avt) to the latest version
+* Upgraded dependencies, including security fixes
+
+## 3.2.0 (2026-03-01)
+
+* Improved querying for terminal theme and version
+* Added support for playback from stdin (thanks @fopina!)
+* Improved implementation of ALiS protocol
+* Switched from full jitter to equal jitter when timing stream reconnection attempts
+* Added `--description`, `--visibility`, `--audio-url` options for `stream` and `session` commands (thanks @hh!)
+* Added `--title`, `--description`, `--visibility`, `--audio-url` options for `upload` command
+* Fixed key bindings parsing (regression from 2.x) (#720)
+* Upgraded the embedded player to the latest version
+
+## 3.1.0 (2026-01-14)
+
+* Implemented caching and compression for static assets served by the built-in
+  HTTP server in the local streaming mode (`asciinema stream -l`)
+* Enabled Nerd Font symbols in the embedded player when streaming locally
+* Upgraded the embedded player to the latest version
+* Upgraded the virtual terminal (avt) to the latest version
+
+## 3.0.1 (2025-10-24)
+
+* Fixed reading of asciicasts v1 and v2 having null env values in header
+* Fixed the license identifier in cargo package
+* Fixed Dockerfile
+* Upgraded embedded player to the latest version
+* Enabled Link-Time Optimization (LTO) and codegen-units=1 for release build - smaller binary size
+* Cleaned up nix flake
+
+## 3.0.0 (2025-09-15)
+
+This is a complete rewrite of asciinema in Rust, upgrading the recording file
+format, introducing terminal live streaming, and bringing numerous improvements
+across the board.
+
+### New features
+
+* New `stream` command for terminal live streaming, providing local mode
+  (built-in HTTP server) and remote mode (relaying via asciinema server, more
+  about it [here](https://docs.asciinema.org/manual/server/streaming/))
+* New `session` command for simultaneous recording and streaming
+* New `convert` command for format conversion between asciicast versions or
+  exporting to plain text log / raw output
+* New [asciicast v3 file
+  format](https://docs.asciinema.org/manual/asciicast/v3/) as the new default
+  output format
+* Terminal theme capture - terminal colors are now automatically captured and
+  saved in recordings
+* New output format - plain text log - use `.txt` extension for the output
+  filename or select explicitly with `--output-format txt`
+* `rec`: New `--return` option for propagating session exit status
+* `rec`: Session exit status is now saved as "x" (exit) event in asciicast v3
+  recordings
+* `rec`: Parent directories are automatically created when recording to
+  non-existing paths
+* `rec`: Terminal version (XTVERSION OSC query) is now saved in asciicast
+  header as `term.version`
+* `rec`: New `--headless` option for forcing headless mode
+* `rec`: New `--log-file` option for enabling logging, e.g. for troubleshooting
+  I/O errors
+* `play`: New `--resize` option for enabling terminal auto-resize during playback (terminal support varies)
+* New `--server-url` option for setting custom server URL (for self-hosted
+  servers), as an alternative to config file and `ASCIINEMA_SERVER_URL`
+  environment variable
+* New system-wide configuration file `/etc/asciinema/config.toml` for setting
+  defaults for all users
+* Command name prefix matching - you can use `asciinema r` instead of
+  `asciinema rec`, `asciinema u` instead of `asciinema upload`, etc.
+* tmux status bar is now used for notifications when tmux session is detected
+  and no other desktop notification mechanism is available
+
+### Improvements
+
+* Prompt for setting up default asciinema server URL on first use, unless one
+  is configured upfront
+* Comprehensive `--help` messages (vs concise `-h`), with examples for each
+  subcommand
+* Complete set of man pages and shell auto-completion files can be generated
+  during build (see README.md)
+* `rec`: Fixed saving of custom record command (`--command`) value in asciicast
+  header
+* `rec`: `--append` option can now be used with `--format raw`
+* `upload`: Recording file is validated for correctness/formatting before upload
+* Better error message when non-UTF-8 locale is detected
+
+
+### Breaking changes
+
+* `rec`: Filename argument is now required, use explicit `upload` command for
+  publishing a local recording
+* `rec`: Default output format is now asciicast v3 instead of v2 - asciinema
+  server and player support it already, but be aware of this if you're using
+  custom tooling - use `--output-format asciicast-v2` for backward compatibility
+* `rec`: `--stdin` option has been renamed to `--capture-input` / `-I` for
+  clarity
+* `rec`: `--env` option has been renamed to `--capture-env`, short `-e` variant
+  has been removed
+* `rec`: `--cols` and `--rows` options have been replaced with single
+  `--window-size COLSxROWS` option
+* `rec`: `--raw` option has been removed, superceded by `--output-format raw`
+* `rec`: `--yes` / `-y` option has been removed since there's no upload
+  confirmation anymore
+* `rec`: Using both `--append` and `--overwrite` options together now produces
+  an immediate error instead of silently ignoring one option
+* `cat`: This command now concatenates multiple recordings instead of dumping
+  raw output - use `convert --output-format raw` for 2.x behavior
+* `play`: `--out-fmt` and `--stream` options have been removed
+* User configuration file changed format from "ini-style" to TOML, and moved
+  from `~/.config/asciinema/config` to `~/.config/asciinema/config.toml` - check
+  [configuration docs](https://docs.asciinema.org/manual/cli/configuration/) for
+  details
+* Removed built-in support for desktop notifications via terminal-notifier in
+  favor of AppleScript on macOS
+
+### Other changes
+
+* Install ID location changed from `XDG_CONFIG_HOME/asciinema/install-id`
+  (`$HOME/.config/asciinema`) to `XDG_STATE_HOME/asciinema/install-id`
+  (`$HOME/.local/state/asciinema`) - for backward compatibility the previous
+  location is still used if the file already exists there
+* `ASCIINEMA_REC` environment variable, which was set to `1` for sessions
+  started with `asciinema rec`, has been superceded by `ASCIINEMA_SESSION`, which
+  is set to a unique session ID by `rec`, `stream` and `session` commands - the
+  original `ASCIINEMA_REC=1` is still set by `rec` command for backward
+  compatibility
+* `ASCIINEMA_API_URL` environment variable has been superceded by
+  `ASCIINEMA_SERVER_URL` for setting custom server URL - the original
+  `ASCIINEMA_API_URL` still works but is deprecated
+
+## 2.4.0 (2023-10-23)
+
+* When recording without file arg we now ask whether to save, upload or discard the recording (#576)
+* Added capture of terminal resize events (#565)
+* Fixed blocking write error when PTY master is not ready (#569) (thanks @Low-power!)
+* Fixed "broken pipe" errors when piping certain commands during recording (#369) (thanks @Low-power!)
+* Fixed crash during playback of cast files with trailing blank line (#577)
+
+## 2.3.0 (2023-07-05)
+
+* Added official support for Python 3.11
+* Dropped official support for Python 3.6
+* Implemented markers in `rec` and `play -m` commands
+* Added `--loop` option for looped playback in `play` command
+* Added `--stream` and `--out-fmt` option for customizing output of `play` command
+* Improved terminal charset detection (thanks @djds)
+* Extended `cat` command to support multiple files (thanks @Low-power)
+* Improved upload error messages
+* Fixed direct playback from URL
+* Made raw output start with terminal size sequence (`\e[8;H;Wt`)
+* Prevented recording to stdout when it's a TTY
+* Added target file permission checks to avoid ugly errors
+* Removed named pipe re-opening, which was causing hangs in certain scenarios
+* Improved PTY/TTY data reading - it goes in bigger chunks now (256 kb)
+* Fixed deadlock in PTY writes (thanks @Low-power)
+* Improved input forwarding from stdin
+* Ignored OSC responses in recorded stdin stream
+
+## 2.2.0 (2022-05-07)
+
+* Added official support for Python 3.8, 3.9, 3.10
+* Dropped official support for Python 3.5
+* Added `--cols` / `--rows` options for overriding size of pseudo-terminal reported to recorded program
+* Improved behaviour of `--append` when output file doesn't exist
+* Keyboard input is now explicitly read from a TTY device in addition to stdin (when stdin != TTY)
+* Recorded program output is now explicitly written to a TTY device instead of stdout
+* Dash char (`-`) can now be passed as output filename to write asciicast to stdout
+* Diagnostic messages are now printed to stderr (without colors when stderr != TTY)
+* Improved robustness of writing asciicast to named pipes
+* Lots of codebase modernizations (many thanks to Davis @djds Schirmer!)
+* Many other internal refactorings
+
+## 2.1.0 (2021-10-02)
+
+* Ability to pause/resume terminal capture with `C-\` key shortcut
+* Desktop notifications - only for the above pause feature at the moment
+* Removed dependency on tput/ncurses (thanks @arp242 / Martin Tournoij!)
+* ASCIINEMA_REC env var is back (thanks @landonb / Landon Bouma!)
+* Terminal answerbacks (CSI 6 n) in `asciinema cat` are now hidden (thanks @djpohly / Devin J. Pohly!)
+* Codeset detection works on HP-UX now (thanks @michael-o / Michael Osipov!)
+* Attempt at recording to existing file suggests use of `--overwrite` option now
+* Upload for users with very long `$USER` is fixed
+* Added official support for Python 3.8 and 3.9
+* Dropped official support for EOL-ed Python 3.4 and 3.5
+
 ## 2.0.2 (2019-01-12)
 
 * Official support for Python 3.7

@@ -1,75 +1,130 @@
 # Contributing to asciinema
 
-First, if you're opening a Github issue make sure it goes to the correct repository:
+Thank you for your interest in contributing! This document describes how
+contributions work across the asciinema ecosystem:
 
-* [asciinema/asciinema](https://github.com/asciinema/asciinema/issues) - command-line recorder
-* [asciinema/asciinema-server](https://github.com/asciinema/asciinema-server/issues) - public website hosting recordings
-* [asciinema/asciinema-player](https://github.com/asciinema/asciinema-player/issues) - player
+- [asciinema](https://github.com/asciinema/asciinema) - the CLI: terminal
+  session recorder, streamer and player
+- [asciinema-player](https://github.com/asciinema/asciinema-player) - the web
+  player
+- [asciinema-server](https://github.com/asciinema/asciinema-server) - the
+  hosting and streaming platform
+- [agg](https://github.com/asciinema/agg) - the GIF generator
+- [avt](https://github.com/asciinema/avt) - the virtual terminal library
+- [docs](https://github.com/asciinema/asciinema.github.io) - the documentation
+  site
+
+## How asciinema is developed
+
+asciinema is a passion project, built and maintained in spare time by a very
+small team. The project follows a simple philosophy: a focused set of stable,
+robust tools that work well together and stay out of your way.
+
+Development is idea-driven rather than roadmap-driven. There is no formal
+roadmap. New functionality usually gets added once an idea has proven itself,
+often by resurfacing repeatedly in discussions and finding a shape that fits
+the rest of the project. This deliberate pace is a feature: it's what keeps
+asciinema small, dependable and easy to maintain for the years ahead.
+
+## Where things go
+
+- **Bug reports** belong in the issue tracker of the relevant repository.
+  Our issue trackers are for bug reports only.
+- **Feature ideas and change proposals** belong in the GitHub discussions
+  ["Ideas" category](https://github.com/orgs/asciinema/discussions/categories/ideas)
+  or on the [forum](https://discourse.asciinema.org/).
+- **Questions and help requests** belong on the
+  [forum](https://discourse.asciinema.org/) or in the GitHub discussions
+  ["Q&A" category](https://github.com/orgs/asciinema/discussions/categories/q-a).
+  The issue tracker is not a support channel.
+- **Security issues** should be reported privately to admin@asciinema.org.
+  Please do not describe vulnerabilities in public issues or discussions.
 
 ## Reporting bugs
 
-Open an issue in Github issue tracker.
-Tell us what's the problem and include steps to reproduce it (reliably).
-Including your OS/browser/terminal name and version in the report would be great.
+Search existing issues first, including closed ones - your bug may already be
+fixed or reported. If it's new, open an issue in the repository the bug
+belongs to and fill in the issue template completely. Reliable reproduction
+steps and environment details (OS, terminal, browser, versions) make the
+difference between a quick fix and a stalled report.
 
-## Submitting patches with bug fixes
+If you're not sure whether something is a bug, or you can't reproduce it
+reliably, start with a discussion or forum thread instead.
 
-If you found a bug and made a patch for it:
+## Proposing features and changes
 
-* make sure all tests pass
-* send us a pull request, including a description of the fix (referencing an existing issue if there's one)
+For anything beyond a small bug fix, please talk to us before writing code:
 
-## Requesting new features
+1. Start a thread in the
+   ["Ideas" discussions category](https://github.com/orgs/asciinema/discussions/categories/ideas)
+   or on the [forum](https://discourse.asciinema.org/).
+2. Describe the problem you're solving, your proposed approach, and who would
+   benefit from it.
+3. If a maintainer gives the idea a green light, a pull request is very
+   welcome. Link the thread in your PR. A green light means the idea is worth
+   exploring, not a commitment to merge a particular implementation.
 
-We welcome all ideas.
-If you believe most asciinema users would benefit from implementing your idea then feel free to open a Github issue.
-However, as this is an open-source project maintained by a small team of volunteers we simply can't implement all of them due to limited resources. Please keep that in mind.
+Here's why we ask for this. When a change is merged, the responsibility for it
+shifts to the maintainers: from that point on we adapt it during refactorings,
+fix bugs in it, and support the people using it, for as long as the code
+lives. Every merge is a long-term commitment, so we are deliberate about which
+commitments we take on. Proposals that benefit a broad range of users and fit
+the project's focus have the best chance of being accepted.
 
-## Proposing features/changes (pull requests)
+Pull requests opened without prior discussion may stay unreviewed for a long
+time or be closed. Even useful, well-implemented changes may be declined when
+they don't fit the project's direction or when we can't take on their
+long-term maintenance.
 
-If you want to propose code change, either introducing a new feature or improving an existing one, please first discuss this with asciinema team. You can simply open a separate issue for a discussion or join #asciinema IRC channel on Libera.Chat.
+If your change is specific to your workflow, or it's something we can't adopt
+right now, maintaining it in your own fork is a perfectly good outcome, and
+one we genuinely encourage. The licenses give you all the freedom you need,
+and we're happy when asciinema code is useful even outside the main line.
 
-## Asking for help
+## Pull requests
 
-Github issue tracker is not a support forum.
-If you need help then either join #asciinema IRC channel on Libera.Chat or drop us an email at support@asciinema.org.
+Bug fix PRs can be opened directly; reference the issue if there is one.
+Feature PRs should follow a green-lit discussion (see above).
 
-## Reporting security issues
+What we look for in a PR:
 
-If you found a security issue in asciinema please contact us at support@asciinema.org.
-For the benefit of all asciinema users please **do not** publish details of the vulnerability in a Github issue.
+- Keep it focused and as small as practical. We may ask for a large change to
+  be split into smaller ones.
+- Match the style and conventions of the surrounding code, and run the
+  repository's formatter before submitting.
+- Make sure the test suite passes, and add tests covering new behavior.
+- Understand every change you submit. You should be able to explain what it
+  does, how it interacts with the rest of the project, and answer review
+  questions yourself.
+- Write the description yourself, in your own words: what the change does, why,
+  and how you tested it. The same goes for discussion threads and review
+  replies.
 
-The PGP key below (1eb33a8760dec34b) can be used when sending encrypted email to or verifying responses from support@asciinema.org.
+We care about the long-term shape of the codebase, so reviews can be picky
+about naming, structure and consistency, even when a change already works.
+Sometimes we'll ask for adjustments or suggest a different implementation
+before merging. Review timelines vary with maintainer availability; your
+patience is appreciated.
 
-```
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2
+### In this repository
 
-mQENBFRH/yQBCADwC8fadhrTTqCFEcQ8ex82FE24b2frRC3fvkFeKsY+v2lniYmZ
-wJ+qsd3cEv5uctCl+lQjrqhJrBx5DnZpCMw85vNuOhz/wjzn7efTISUF+HlnhiZd
-tN3FPbk4uu+1JiiZ7SEvH+I4JjM46Vx6wPZ9en79u8VPMLJ24F81Rar62oiMuL29
-PGV7CdG+ErUHEQfN1qLaZNQqkPCQSAouxooNqXKjs/mmz2651FrP8TKVr2f6B/2O
-YJ++H9SoIp7Ly+/fEjgmdaZnGqfxnBC+Pm82tZguprWeh8pdiu9ieJswr4S9tRms
-h2+eht8PWwkaOOhcFdZLnJFoXHOPzHilQVutABEBAAG0KUFzY2lpbmVtYSBTdXBw
-b3J0IDxzdXBwb3J0QGFzY2lpbmVtYS5vcmc+iQE4BBMBAgAiBQJUR/8kAhsDBgsJ
-CAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRAeszqHYN7DSyCeCADS9Jk7Ibl2f+2K
-eZ4XmYU0UxU55EtHZBd34yF+FGbl4doQhnKcRqT5lKLfYk4x3LzzPAHNSbRS05/K
-fw8l72GLHY01U/3slAixphIR8LwVyqPxwelTqLzkDvcK1TTTFnOM/XUT1ymNUS7i
-6Bs889I4I8bPrnt1XK+W35/SqZbBAWotdidCbI/oKQgffCbVsH/Im5pnXTapvf/l
-sRUpB2fp7vD5+ycKDcB5CqbtnsPU9vCPL11GG3ijwQBgnPc0fKanUHb3IMElQ0ju
-8IYTZjpPe7bIV3V3nYZvdO41IYLCHhRpvNt4BO2amQoGyqTqGHr/rCY1aEToDG2c
-cOdsEOmuuQENBFRH/yQBCACsR59NPSwGoK4zGgzDjuY7yLab2Tq1Jg1c038lA23G
-t3H9aOpVbeYGvDPYLHi2y1cCNv19nzs5/k/LAflhTcgPjipTHQ2ojDG+MNfO4qyH
-3JFhm1WUw6zxFjBXfsZhoCKTNHZkzH+d0jeutbBq/Rd77sLjN/VVTLfzJCZhyhKD
-VEyO6DYaANZn1B/xx84WdxqqiQsLELOCQVUCG7HzbQAmx7lYYIUAwUoFTrBeBd+d
-sN7htw3j7le99EiccqMXceZd2W9cAlRfXcjHtvbtkbJTcsvANSUSU10q5uuT3f6l
-NftTLWOGZnu/rFU/ow5ipKft0ygfJKpMHD+AoLkiRIajABEBAAGJAR8EGAECAAkF
-AlRH/yQCGwwACgkQHrM6h2Dew0tG1wgAqOkkSznwF+6muK88GgrgasqnIq2t2VkN
-fTEKmykgSuMxiN4bsNLc4FQECZqIcL7zGuD6fFnsnO6Hg36R4rYGFSEsjjN7rXj0
-QLnrJJLZV0oA6Q77fUqdB0he7uJm+nlQjUv8HNJwp1oIyhhHz/r1kTHUlX+bEMO3
-Khc96UnE7nzwPBCbUvKuHJQY6K2ms1wgr9ELXjF1KVU9QtBtG2/XWRGDHDwQKxnW
-+2pRVtn2xNJ9rBipGG86ZU88vurYjgPZrXaex3M1QGD/8+9Wlp/TR7YUzjiZbtwc
-6mpG4SUlwZheX9RbTRdjnLr7Qy+CddOWvGxebgk23/U90KrDyHDHig==
-=2M/2
------END PGP PUBLIC KEY BLOCK-----
-```
+- Pull requests should target the `develop` branch. The `python` branch holds
+  the legacy 2.x codebase and is not under active development.
+- Verify your changes with `cargo test`.
+
+## AI-assisted contributions
+
+If you use AI coding tools, note that in your PR description: which tool, and
+to what extent (e.g. "wrote the first draft, which I then reviewed and
+reworked").
+
+The expectations above apply no matter how a change was produced. Reviewing a
+change is often more work than writing it, and you are the one who needs to
+understand, test and stand behind what you submit.
+
+## Community
+
+- [Forum](https://discourse.asciinema.org/)
+- [GitHub discussions](https://github.com/orgs/asciinema/discussions)
+- [Matrix](https://matrix.to/#/#asciinema:matrix.org)
+- [IRC](https://web.libera.chat/#asciinema) (#asciinema on Libera.Chat)
